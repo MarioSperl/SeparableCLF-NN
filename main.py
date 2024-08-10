@@ -13,7 +13,6 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
-import tensorflow.keras.backend as kb
 import pickle
 
 from settings import *
@@ -122,12 +121,6 @@ def train_batch(dnn, x_batch_train, ub_batch_train, lb_batch_train, vf_batch_tra
     - bloss_vec: Tensor of boundary condition loss values.
     - gloss_vec: Tensor of gradient loss values.
     """
-    print('Shape x batch train ')
-    print(x_batch_train.shape)
-    print('Shape vf batch train ')
-    print(vf_batch_train.shape)
-    print('Shape vg train ')
-    print(vg_batch_train.shape)
 
     # Start gradient recording for model parameters
     with tf.GradientTape() as tape:
