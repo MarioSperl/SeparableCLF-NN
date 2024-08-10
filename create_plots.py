@@ -3,18 +3,12 @@ import pickle
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-import tensorflow.keras.backend as kb
-from matplotlib.gridspec import GridSpec
+
 import os, sys, random
 
 
 from settings import *
 from auxiliary import * 
-
-
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-
 
 
 def set_seeds(seed_value):
@@ -42,6 +36,18 @@ def set_seeds(seed_value):
 
 # Runge Kutta 4
 def RK4(x0, u, h):
+    """
+    Perform one step of the fourth-order Runge-Kutta (RK4) method to solve ordinary differential equations.
+
+    Args:
+        x0 (tf.Tensor): The initial state.
+        u (tf.Tensor): The applied control.
+        h (float): The step size.
+
+    Returns:
+        tf.Tensor: The updated state after the RK4 step.
+
+    """
 
     k1 = h * tf.cast(tf.stack(param.example.f(x0, u), axis=1), tf.float32)
     k2 = h * tf.cast(tf.stack(param.example.f(x0 + k1 / 2, u), axis=1), tf.float32)
@@ -54,8 +60,24 @@ def RK4(x0, u, h):
 
 ##------------------------------------------------------------------------------
 ##### plot computed CLF
-def CLF(model=None, axis1=1, axis2=2, dirname='', zmin=-10., zmax=10., numpoints = 100, plot_bounds = False):
-    # define resolution
+def CLF(model=None, axis1=0, axis2=1, dirname='', zmin=-10., zmax=10., numpoints = 100, plot_bounds = False):
+    """
+    Generate and plot the Control Lyapunov Function (CLF) and its directional derivative projected onto axis1 and axis2.
+
+    Args:
+        model: The neural network model used to compute the CLF. 
+        axis1 (int): The first axis to plot. Default is 0.
+        axis2 (int): The second axis to plot. Default is 1.
+        dirname (str): Directory name for saving the plot. Default is an empty string.
+        zmin (float): The minimum value for the z-axis in the plot. Default is -10.
+        zmax (float): The maximum value for the z-axis in the plot. Default is 10.
+        numpoints (int): Number of points to use in the mesh grid for plotting. Default is 100.
+        plot_bounds (bool): Whether to plot upper and lower bounds on the CLF. Default is False.
+
+    Returns:
+        None: The function generates and saves a 3D plot as a PDF.
+
+    """
 
 
     # define plotting range and mesh
@@ -99,8 +121,8 @@ def CLF(model=None, axis1=1, axis2=2, dirname='', zmin=-10., zmax=10., numpoints
         grads = tape.gradient(ypm, tDT)
 
     # compute orbital derivative
-    Ee = kb.sum(grads * kb.transpose(tf.convert_to_tensor(param.example.vf(DT), dtype=tf.float32)), axis=1) - \
-         param.example.control_size * calculate_DV_vg_norm(grads, kb.transpose(
+    Ee = tf.reduce_sum(grads * tf.transpose(tf.convert_to_tensor(param.example.vf(DT), dtype=tf.float32)), axis=1) - \
+         param.example.control_size * calculate_DV_vg_norm(grads, tf.transpose(
         tf.convert_to_tensor(param.example.vg(DT), dtype=tf.float32)), param.example.controldim)
 
     # compute upperbound
@@ -196,11 +218,7 @@ def CLF(model=None, axis1=1, axis2=2, dirname='', zmin=-10., zmax=10., numpoints
 
         ax.plot_surface(X, Y, Zl, rstride=5, cstride=5, color='orange', alpha = 1)
 
-    surface = ax.plot_surface(X, Y, Zp, cmap=cmap)
-
-
-    # Add a title
-    # plt.title(r'$\mathrm{CLF~Model~using~Original~Approach}$')
+    surface = ax.plot_surface(X, Y, Zp, cmap=cmap) 
 
     # Save the plot as a PDF
     pdf_filename = f'Plot/CLF{dirname}.pdf'
@@ -236,7 +254,7 @@ def plot_multiple_V_trajectories(dirname='', num_initial_states=5, steps=2500, s
         u = []
         for idx in range(param.example.controldim):
             vg_x = tf.convert_to_tensor(tf.cast(tf.transpose(param.example.vg(x)[idx]), dtype=tf.float32), dtype=tf.float32)
-            u.append(-param.example.control_size * kb.sign(tf.reduce_sum(gradx * vg_x, axis=1)))
+            u.append(-param.example.control_size * tf.sign(tf.reduce_sum(gradx * vg_x, axis=1)))
         return tf.transpose(tf.convert_to_tensor(u, dtype=tf.float32)) 
 
     def simulate_trajectory(x_initial):
@@ -302,7 +320,7 @@ if __name__ == '__main__':
         os.mkdir(out_directory)
     CLF(axis1=0, axis2=2, dirname=f'_{param.example.title}_test', zmin=-12, zmax = 12, numpoints=300, plot_bounds=False)
 
-    plot_multiple_V_trajectories(dirname=f'_{param.example.title}_Trajectory', num_initial_states=10, steps=1500, stepsize=0.001, domain_factor=0.5)
+    # plot_multiple_V_trajectories(dirname=f'_{param.example.title}_Trajectory', num_initial_states=10, steps=1500, stepsize=0.001, domain_factor=0.5)
 
 
     plt.show()
