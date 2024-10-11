@@ -315,7 +315,7 @@ if __name__ == '__main__':
 
     if not os.path.exists(out_directory):
         os.mkdir(out_directory)
-    CLF(axis1=0, axis2=2, dirname=f'_{param.example.title}_test', zmin=-12, zmax = 12, numpoints=300, plot_bounds=False)
+    CLF(axis1=1, axis2=3, dirname=f'_{param.example.title}_test', zmin=-12, zmax = 12, numpoints=300, plot_bounds=False)
 
     # plot_multiple_V_trajectories(dirname=f'_{param.example.title}_Trajectory', num_initial_states=10, steps=1500, stepsize=0.001, domain_factor=0.5)
 
