@@ -60,7 +60,7 @@ def RK4(x0, u, h):
 
 ##------------------------------------------------------------------------------
 ##### plot computed CLF
-def CLF(model=None, axis1=0, axis2=1, dirname='', zmin=-10., zmax=10., numpoints = 100, plot_bounds = False):
+def CLF(model=None, axis1=1, axis2=2, dirname='', zmin=-10., zmax=10., numpoints = 100, plot_bounds = False):
     """
     Generate and plot the Control Lyapunov Function (CLF) and its directional derivative projected onto axis1 and axis2.
 
