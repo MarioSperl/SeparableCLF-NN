@@ -162,13 +162,10 @@ def CLF(model=None, axis1=0, axis2=1, dirname='', zmin=-10., zmax=10., numpoints
     cmap = plt.get_cmap('viridis')  # You can change 'viridis' to any other colormap
     cmap.set_bad('none')  # Set masked values as transparent
 
-   
-    axis_number1 = axis1 + 1
-    axis_number2 = axis2 + 1
 
     # Add labels and adjust the z-axis limits
-    ax.set_xlabel(r'$x_{}$'.format(axis_number1), fontsize = 28, labelpad = 15)
-    ax.set_ylabel(r'$x_{}$'.format(axis_number2), fontsize = 28, labelpad = 15)
+    ax.set_xlabel(r'$x_{}$'.format(axis1), fontsize = 28, labelpad = 15)
+    ax.set_ylabel(r'$x_{}$'.format(axis2), fontsize = 28, labelpad = 15)
     ax.set_zlabel(r'$W, DWf$', fontsize = 28, labelpad = 15)
     ax.set_zlim(zmin, zmax)
 
