@@ -16,19 +16,27 @@ class CLF_10dim:
         f(x, u):
             Computes the system dynamics f(x,u) with control input `u` at state `x`.
     """
-    title = 'CLF_10dim'
-
-    # define the dimensions of the problem
-    inputdim = 10  # dimension of the state space (variable n in paper)
-    interval_size = 1  # compute a Lyapunov function on the cube [-interval_size, interval_size]**inputdim
-    control_size = 1  # assume the space of control values to be given as U = [-control_size, control_size]
-    controldim = 5
-    perturbation = np.random.normal(scale=0.1, size=(10, 10))
-    T_matrix = np.eye(10) + perturbation
-    T_inv = np.linalg.inv(T_matrix)
 
     def __init__(self):
         self.constant_size = 4.0  # transform the state space from [-constant_size, constant_size]**inputdim to [-1,1]**inputdim
+        self.title = 'CLF_10dim'
+
+        # define the dimensions of the problem
+        self.inputdim = 10  # dimension of the state space (variable n in paper)
+        self.interval_size = 1  # compute a Lyapunov function on the cube [-interval_size, interval_size]**inputdim
+        self.control_size = 1  # assume the space of control values to be given as U = [-control_size, control_size]
+        self.controldim = 5
+        self.perturbation = np.random.normal(scale=0.1, size=(10, 10))
+        # self.T_matrix = generate_invertible_matrix(10, max_condition_number=2)
+        self.T_matrix = np.eye(10) + self.perturbation
+        # print(self.perturbation)
+
+        #self.T_matrix = np.eye(10) 
+        self.T_inv = np.linalg.inv(self.T_matrix)
+        print(np.linalg.norm(self.T_inv, 2))
+        print(np.linalg.norm(self.T_matrix,2))
+        print(self.T_matrix)
+        print(self.T_inv)
 
     def vf(self, x):
         """
@@ -42,11 +50,11 @@ class CLF_10dim:
         """
         x = np.array(np.matmul(x, self.T_matrix.T))
         
-        y = [- self.constant_size * x[:,0] + self.constant_size * x[:,1] * self.constant_size * x[:,0] - 0.1 * np.power(x[:, 8], 2), 0 * x[:,1], 
-             - self.constant_size * x[:,2] + self.constant_size * x[:,3] * self.constant_size * x[:,2] - 0.1 * np.power(x[:, 0], 2), 0 * x[:,3],
-             - self.constant_size * x[:,4] + self.constant_size * x[:,5] * self.constant_size * x[:,4] + 0.1 * np.power(x[:, 6], 2), 0 * x[:,5],
+        y = [- self.constant_size * x[:,0] + self.constant_size * x[:,1] * self.constant_size * x[:,0] - 0.1 * self.constant_size**2 * np.power(x[:, 8], 2), 0 * x[:,1], 
+             - self.constant_size * x[:,2] + self.constant_size * x[:,3] * self.constant_size * x[:,2] - 0.1 * self.constant_size**2 * np.power(x[:, 0], 2), 0 * x[:,3],
+             - self.constant_size * x[:,4] + self.constant_size * x[:,5] * self.constant_size * x[:,4] + 0.1 * self.constant_size**2 * np.power(x[:, 6], 2), 0 * x[:,5],
              - self.constant_size * x[:,6] + self.constant_size * x[:,7] * self.constant_size * x[:,6], 0 * x[:,7],
-             - self.constant_size * x[:,8] + self.constant_size * x[:,9] * self.constant_size * x[:,8], 0 * x[:,9] + 0.1 * np.power(x[:, 1], 2)]
+             - self.constant_size * x[:,8] + self.constant_size * x[:,9] * self.constant_size * x[:,8], 0 * x[:,9] + 0.1 * self.constant_size**2 * np.power(x[:, 1], 2)]
         
         return np.matmul(self.T_inv, y) 
     
@@ -90,16 +98,17 @@ class CLF_10dim:
         """
         x = np.array(np.matmul(x, self.T_matrix.T))
 
-        y = [- self.constant_size * x[:,0] + self.constant_size * x[:,1] * self.constant_size * x[:,0] - 0.1 * np.power(x[:, 8], 2),- self.constant_size * x[:,1] * u[:, 0], 
-             - self.constant_size * x[:,2] + self.constant_size * x[:,3] * self.constant_size * x[:,2] - 0.1 * np.power(x[:, 0], 2),- self.constant_size * x[:,3] * u[:, 1],
-             - self.constant_size * x[:,4] + self.constant_size * x[:,5] * self.constant_size * x[:,4] + 0.1 * np.power(x[:, 6], 2),- self.constant_size * x[:,5] * u[:, 2],
+        y = [- self.constant_size * x[:,0] + self.constant_size * x[:,1] * self.constant_size * x[:,0] - 0.1 * self.constant_size**2 * np.power(x[:, 8], 2),- self.constant_size * x[:,1] * u[:, 0], 
+             - self.constant_size * x[:,2] + self.constant_size * x[:,3] * self.constant_size * x[:,2] - 0.1 * self.constant_size**2 * np.power(x[:, 0], 2),- self.constant_size * x[:,3] * u[:, 1],
+             - self.constant_size * x[:,4] + self.constant_size * x[:,5] * self.constant_size * x[:,4] + 0.1 * self.constant_size**2 * np.power(x[:, 6], 2),- self.constant_size * x[:,5] * u[:, 2],
              - self.constant_size * x[:,6] + self.constant_size * x[:,7] * self.constant_size * x[:,6],- self.constant_size * x[:,7] * u[:, 3],
-             - self.constant_size * x[:,8] + self.constant_size * x[:,9] * self.constant_size * x[:,8],- self.constant_size * x[:,9] * u[:, 4] + 0.1 * np.power(x[:, 1], 2)]
+             - self.constant_size * x[:,8] + self.constant_size * x[:,9] * self.constant_size * x[:,8],- self.constant_size * x[:,9] * u[:, 4] + 0.1 * self.constant_size**2 * np.power(x[:, 1], 2)]
         
         y = np.array(y)
         result = tf.convert_to_tensor(np.matmul(self.T_inv, y),  dtype=tf.float32)
 
         return result
+    
     
 
 class Pendulum:
