@@ -19,14 +19,14 @@ class Param:
         self.layersize = 64  # Size of the hidden layers for fully connected NN
         self.layers = 1  # Number of hidden layers for fully connected NN
 
-        self.subnum = 5  # Number of sublayers in the reduced network structure
+        self.subnum = 5 # Number of sublayers in the reduced network structure
         self.subdim = 2  # Dimension of the input of each sublayer
-        self.sublayersize = 64  # Size of the sublayer
+        self.sublayersize =  64 # Size of the sublayer
 
         # ----- Parameters for training data ---- 
         self.data_size = 200000  # Number of randomly generated points for training
-        self.val_size = 100000  # Number of randomly generated points for validation
-        self.test_size = 200000  # Number of randomly generated points for testing
+        self.val_size = 200000  # Number of randomly generated points for validation
+        self.test_size = 100000  # Number of randomly generated points for testing
 
         self.adaptive_grid_size = 100000  # Number of points used for verification within adaptive sampling
 
@@ -37,8 +37,8 @@ class Param:
 
         # --- Parameters for training loop ----
         self.max_epochs = 30  # Maximal number of epochs until the training process is stopped
-        self.min_epochs = 5  # Minimal number of epochs until the training process is stopped
-        self.tol = 1e-5  # Tolerance (applied on validation data) for stopping the training
+        self.min_epochs = 10  # Minimal number of epochs until the training process is stopped
+        self.tol = 1e-5   #modified: Tolerance on L1 error of training; previously L \infty applied on validation data for stopping the training
 
         # Set coefficients of the comparison functions
         self.upper = 10  # Upper bound \alpha_2

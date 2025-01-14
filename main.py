@@ -339,7 +339,7 @@ def Training(model, data, progress, param):
 
     if not tolerance_reached:
         print('--------------------')
-        print(f'Desired Tolerance was not reached')
+        print(f'Maximal number of epochs reached')
         print(f'Training was stopped after {param.max_epochs:2d} epochs')
         progress.finalepoch = param.max_epochs
 
