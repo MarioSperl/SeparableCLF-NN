@@ -38,6 +38,7 @@ def calculate_DV_vg_norm(gradx_batch, vg_batch_train, controldim):
                    for each sample in the batch.
 
     """
+
     erg = 0
     for idx in range(controldim):
         matmul_result = tf.reduce_sum(gradx_batch * vg_batch_train[:, :, idx], axis=1)
