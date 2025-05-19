@@ -284,7 +284,7 @@ def plot_multiple_V_trajectories(dirname='', num_initial_states=5, steps=2500, s
 
     # Plot settings
     ax.set_xlabel(r'$t$', fontsize=28, labelpad=15)
-    ax.set_ylabel(r'$W(x(t); \theta)$', fontsize=28, labelpad=15)
+    ax.set_ylabel(r'$W_{\theta}(x(t))$', fontsize=28, labelpad=15)
     ax.grid(True, linestyle='-', alpha=0.5)
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
@@ -313,11 +313,11 @@ if __name__ == '__main__':
     filehandler = open(f'{in_directory}/TrainingProgress.pkl', 'rb')
     progress = pickle.load(filehandler)
 
-    if not os.path.exists(out_directory):
-        os.mkdir(out_directory)
-    CLF(axis1=0, axis2=2, dirname=f'_{param.example.title}_test', zmin=-12, zmax = 12, numpoints=300, plot_bounds=False)
+    # if not os.path.exists(out_directory):
+    #     os.mkdir(out_directory)
+    # CLF(axis1=0, axis2=2, dirname=f'_{param.example.title}_test', zmin=-12, zmax = 12, numpoints=300, plot_bounds=False)
 
-    # plot_multiple_V_trajectories(dirname=f'_{param.example.title}_Trajectory', num_initial_states=10, steps=1500, stepsize=0.001, domain_factor=0.5)
+    plot_multiple_V_trajectories(dirname=f'_{param.example.title}_Trajectory', num_initial_states=20, steps=1500, stepsize=0.001, domain_factor=0.5)
 
 
     plt.show()

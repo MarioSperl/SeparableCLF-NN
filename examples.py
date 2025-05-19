@@ -35,8 +35,8 @@ class CLF_10dim:
         self.T_inv = np.linalg.inv(self.T_matrix)
         print(np.linalg.norm(self.T_inv, 2))
         print(np.linalg.norm(self.T_matrix,2))
-        print(self.T_matrix)
-        print(self.T_inv)
+        # print(self.T_matrix)
+        # print(self.T_inv)
 
     def vf(self, x):
         """
